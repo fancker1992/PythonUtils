@@ -12,7 +12,10 @@ import redis
 
 class RedisClient:
     def __init__(self, host, port, password=None, db=0):
-        self.redis = redis.Redis(host=host, port=port, password=password, db=db)
+        # self.redis = redis.Redis(host=host, port=port, password=password, db=db)
+        # 连接池
+        pool = redis.ConnectionPool(host=host, port=port, password=password, decode_responses=True)
+        self.redis = redis.StrictRedis(connection_pool=pool)
 
     def set(self, key, value, ex=None, px=None, nx=False, xx=False):
         self.redis.set(key, value, ex=ex, px=px, nx=nx, xx=xx)
